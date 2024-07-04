@@ -1,7 +1,7 @@
 const { Issuer, generators } = require('openid-client');
 const config = require('../config/config');
 const jose = require('jose');
-const uuid = require('uuid').v4;
+const uuid = require('crypto').randomUUID;
 
 let client = null;
 let keyPair = null;
