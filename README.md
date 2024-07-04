@@ -45,7 +45,7 @@ on [`src/provider/oidcProvider.js`](https://github.com/dnanexus/oidc-example-app
   id_token_encrypted_response_enc: 'A256GCM',
 ```
   *If you wish to use a different encryption or encoding algorithms then you'll need to change the client constructor parameters to match your client configuration.<br/>
-  See (Enabling App Users to Log In with DNAnexus Credentials)[https://documentation.dnanexus.com/developer/apps/enabling-app-users-to-log-in-with-dnanexus-credentials] .*
+  See [Enabling App Users to Log In with DNAnexus Credentials](https://documentation.dnanexus.com/developer/apps/enabling-app-users-to-log-in-with-dnanexus-credentials) .*
   
 
 
