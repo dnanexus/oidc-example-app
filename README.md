@@ -40,8 +40,8 @@ ID Token returned by the provider are encrypted under [JWE](https://www.rfc-edit
 By default this sample app generates an RSA keyPair and configures the oidc accordingly:
 on [`src/provider/oidcProvider.js`](./src/providers/oidcProvider.js#L28)
 
-*If you wish to use a different encryption or encoding algorithms then you'll need to change the client constructor parameters to match your client configuration.<br/>
-See (Enabling App Users to Log In with DNAnexus Credentials)[https://documentation.dnanexus.com/developer/apps/enabling-app-users-to-log-in-with-dnanexus-credentials] .*
+  *If you wish to use a different encryption or encoding algorithms then you'll need to change the client constructor parameters to match your client configuration.<br/>
+  See [Enabling App Users to Log In with DNAnexus Credentials](https://documentation.dnanexus.com/developer/apps/enabling-app-users-to-log-in-with-dnanexus-credentials) .*
 
 ----
 
