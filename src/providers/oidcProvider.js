@@ -1,7 +1,7 @@
 const { Issuer, generators } = require('openid-client');
 const config = require('../config/config');
 const jose = require('jose');
-const uuid = require('crypto').randomUUID;
+const { randomUUID } = require('crypto');
 
 let client = null;
 let keyPair = null;
@@ -91,7 +91,7 @@ async function getJWKSPair() {
   const { publicKey, privateKey } = await jose.generateKeyPair('PS256');
 
   keyPair = {
-    kid: uuid(),
+    kid: randomUUID(),
     publicKey: await jose.exportJWK(publicKey),
     privateKey:await jose.exportJWK(privateKey)
   };  

@@ -4,11 +4,11 @@ const bodyParser = require('body-parser');
 const config = require('./config/config');
 const routes = require('./routes');
 const errorHandler = require('./errorHandler');
-const uuid = require('crypto').randomUUID;
+const { randomUUID }  = require('crypto');
 const app = express();
 
 app.use(session({
-  secret: uuid(),
+  secret: randomUUID(),
   resave: false,
   saveUninitialized: true
 }));
