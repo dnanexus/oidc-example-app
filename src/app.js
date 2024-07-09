@@ -1,18 +1,20 @@
 const express = require('express');
 const session = require('express-session');
+const { csrf } = require('lusca');
 const bodyParser = require('body-parser');
 const config = require('./config/config');
 const routes = require('./routes');
 const errorHandler = require('./errorHandler');
 const { randomUUID }  = require('crypto');
+
 const app = express();
 
 app.use(session({
   secret: randomUUID(),
-  resave: false,
-  saveUninitialized: true
+  cookie: { maxAge: 60000 },
 }));
 
+app.use(csrf());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use('/', routes);
