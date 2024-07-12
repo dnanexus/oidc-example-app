@@ -8,7 +8,11 @@ const cfg = {
     client_secret: process.env['OIDC_CLIENT_SECRET'] ?? 'exampleAppClientSecret',    
     redirect_url: process.env['OIDC_REDIRECT_URL'] ?? `http://localhost:${process.env['APP_PORT'] ?? 3333}/callback`,
     scopes: process.env['OIDC_SCOPES'] ?? 'user_id name email' //Note: "openid" scope is required and added by default
-  } 
+  },
+  jwks: {
+    private_key_path: process.env['PRIVATE_KEY_PATH'] ?? undefined,
+    public_key_path: process.env['PUBLIC_KEY_PATH'] ?? undefined
+  }
 };
 
 module.exports = cfg;

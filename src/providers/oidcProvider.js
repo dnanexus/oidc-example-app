@@ -2,6 +2,8 @@ const { Issuer, generators } = require('openid-client');
 const config = require('../config/config');
 const jose = require('jose');
 const { randomUUID } = require('crypto');
+const { readFileSync } = require('fs');
+const { resolve } = require('path');
 
 let client = null;
 let keyPair = null;
@@ -80,22 +82,53 @@ function getCodeVerifier() {
   return generators.codeVerifier();
 }
 
+
+async function generateKeyPair() {
+  const { publicKey, privateKey } = await jose.generateKeyPair('PS256');  
+
+  return {    
+    publicKey: await jose.exportJWK(publicKey),
+    privateKey: await jose.exportJWK(privateKey),
+    kid: randomUUID()
+  };
+}
+
+async function loadKeysFromFiles() {
+  let publicKey = null;
+  let privateKey = null; 
+
+  if (config.jwks.public_key_path !== undefined) {
+    const publicKeyPath = resolve(config.jwks.public_key_path);
+    console.info(`Loading public key from ${publicKeyPath}`);
+    const publicKey  = JSON.parse(readFileSync(publicKeyPath, 'utf8'));
+  }
+  
+  const privateKeyPath = resolve(config.jwks.private_key_path);
+  console.info(`Loading private key from ${privateKeyPath}`);
+  privateKey = JSON.parse(readFileSync(privateKeyPath, 'utf8'));
+
+  return {    
+    publicKey: publicKey,
+    privateKey: privateKey,
+    kid: privateKey.kid
+  }
+}
+
 /**
- * Generate key pair for token encryption
+ * Provide key pair for token encryption and decryption.
+ * If private key is not provided a key pair is generated
  * 
  * @returns {Object} - The generated JWKS key pair
  */
 async function getJWKSPair() {
   if (keyPair !== null) return keyPair;
 
-  const { publicKey, privateKey } = await jose.generateKeyPair('PS256');
-
-  keyPair = {
-    kid: randomUUID(),
-    publicKey: await jose.exportJWK(publicKey),
-    privateKey:await jose.exportJWK(privateKey)
-  };  
- 
+  if (config.jwks.private_key_path !== undefined ) {
+    keyPair = await loadKeysFromFiles();
+  } else {
+    keyPair = await generateKeyPair();
+  }
+  
   return keyPair;
 }
 
