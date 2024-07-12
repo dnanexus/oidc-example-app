@@ -10,8 +10,8 @@ const cfg = {
     scopes: process.env['OIDC_SCOPES'] ?? 'user_id name email' //Note: "openid" scope is required and added by default
   },
   jwks: {
-    private_key_path: process.env['PRIVATE_KEY_PATH'] ?? undefined,
-    public_key_path: process.env['PUBLIC_KEY_PATH'] ?? undefined
+    private_key_path: process.env['PRIVATE_KEY_PATH'],
+    public_key_path: process.env['PUBLIC_KEY_PATH']
   }
 };
 

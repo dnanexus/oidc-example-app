@@ -37,7 +37,9 @@ These are the available env variables and their default values, adjust them to m
 ID Token returned by the provider are encrypted under [JWE](https://www.rfc-editor.org/rfc/rfc7516.html), 
 [JWKS](https://datatracker.ietf.org/doc/html/rfc7517) are exposed under `APP_URL:APP_PORT/.well-known/jwks.json`.
 
-A pair of keys can be provided via environment variables PUBLIC_KEY_PATH and PRIVATE_KEY_PATH, you can omit PUBLIC_KEY_PATH in case you're providing the public key from a different url outside of this application.
+A pair of keys can be provided via environment variables `PUBLIC_KEY_PATH` and `PRIVATE_KEY_PATH`, you can omit `PUBLIC_KEY_PATH` in case you're providing the public key from a different url outside of this application.  
+Keys must be in [JWK format](https://datatracker.ietf.org/doc/html/rfc7517#appendix-A) and one key object (**in JSON format**) per file is expected.
+
 *If no private key is provided then both keys will be generated.*
 
 By default and when no private key is provided this sample app generates an RSA keyPair and configures the oidc client accordingly:
