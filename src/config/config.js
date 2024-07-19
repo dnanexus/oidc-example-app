@@ -1,10 +1,10 @@
 require('dotenv').config();
 
 const cfg = {
-  port: process.env['APP_PORT'] ?? 3333,
+  port: Number.parseInt(process.env['APP_PORT'], 10) ?? 3333,
   session: {
     cookie: {
-      secure: process.env['SESSION_COOKIE_SECURE'] ?? false,
+      secure: process.env['SESSION_COOKIE_SECURE'] === 'true',
     },
   },
   oidc: {
