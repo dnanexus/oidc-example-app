@@ -1,6 +1,6 @@
 const router = require('express').Router();
-const { home } = require('./controllers/homeController')
-const { login, callback, getJWKS } = require('./controllers/authController');
+const {home} = require('./controllers/homeController')
+const {login, callback, getJWKS} = require('./controllers/authController');
 
 router.get('/', home);
 router.post('/login', login);

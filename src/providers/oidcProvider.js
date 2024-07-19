@@ -1,16 +1,16 @@
-const { Issuer, generators } = require('openid-client');
+const {Issuer, generators} = require('openid-client');
 const config = require('../config/config');
 const jose = require('jose');
-const { randomUUID } = require('crypto');
-const { readFileSync } = require('fs');
-const { resolve } = require('path');
+const {randomUUID} = require('crypto');
+const {readFileSync} = require('fs');
+const {resolve} = require('path');
 
 let client = null;
 let keyPair = null;
 
 /**
  * Initializes an OIDC client.
- * 
+ *
  * @returns {Promise} - The OIDC client
  */
 async function getClient() {
@@ -19,7 +19,7 @@ async function getClient() {
   const url = `${config.oidc.oidc_provider_url}/.well-known/openid-configuration`;
   console.info(`Discovering OpenID Connect configuration from ${url}`);
   const oidcIssuer = await Issuer.discover(url);
-  const {privateKey, kid } = await getJWKSPair();
+  const {privateKey, kid} = await getJWKSPair();
 
   client = new oidcIssuer.Client(
     {
@@ -27,7 +27,7 @@ async function getClient() {
       client_secret: config.oidc.client_secret,
       redirect_uris: [config.oidc.redirect_url],
       response_types: ['code'],
-      scope: config.oidc.scopes,    
+      scope: config.oidc.scopes,
       id_token_signed_response_alg: 'RS256',
       id_token_encrypted_response_alg: 'RSA-OAEP-256',
       id_token_encrypted_response_enc: 'A256GCM',
@@ -44,25 +44,25 @@ async function getClient() {
 
 /**
  * Retrieves tokenSet from oidc provider.
- * 
+ *
  * Calls oidc provider with the request parameters received in the callback.
  * automatically decrypts the tokenSet using the private key set up on client initialization.
- * 
+ *
  * @param {Request} req - The request object
  */
 async function getTokenSet(req) {
   const oidcClient = await getClient();
   const params = oidcClient.callbackParams(req);
   console.log('Received callback with params:', params);
-  return oidcClient.callback(config.oidc.redirect_url, params, { code_verifier: req.session.codeVerifier });
+  return oidcClient.callback(config.oidc.redirect_url, params, {code_verifier: req.session.codeVerifier});
 }
 
 /**
  * Builds the auth URL to redirect the user to the oidc provider.
- * 
+ *
  * @param {string} scopes - The scopes requested by the client
  * @param {string} codeVerifier - The code verifier used in the authorization code flow
- * 
+ *
  * @returns {string} - The URL to redirect the user to the oidc provider
  */
 async function getAuthUrl(scopes, codeVerifier) {
@@ -84,9 +84,9 @@ function getCodeVerifier() {
 
 
 async function generateKeyPair() {
-  const { publicKey, privateKey } = await jose.generateKeyPair('PS256');  
+  const {publicKey, privateKey} = await jose.generateKeyPair('PS256');
 
-  return {    
+  return {
     publicKey: await jose.exportJWK(publicKey),
     privateKey: await jose.exportJWK(privateKey),
     kid: randomUUID()
@@ -95,19 +95,19 @@ async function generateKeyPair() {
 
 async function loadKeysFromFiles() {
   let publicKey = null;
-  let privateKey = null; 
+  let privateKey = null;
 
   if (config.jwks.public_key_path !== undefined) {
     const publicKeyPath = resolve(config.jwks.public_key_path);
     console.info(`Loading public key from ${publicKeyPath}`);
-    const publicKey  = JSON.parse(readFileSync(publicKeyPath, 'utf8'));
+    const publicKey = JSON.parse(readFileSync(publicKeyPath, 'utf8'));
   }
-  
+
   const privateKeyPath = resolve(config.jwks.private_key_path);
   console.info(`Loading private key from ${privateKeyPath}`);
   privateKey = JSON.parse(readFileSync(privateKeyPath, 'utf8'));
 
-  return {    
+  return {
     publicKey: publicKey,
     privateKey: privateKey,
     kid: privateKey.kid
@@ -117,18 +117,18 @@ async function loadKeysFromFiles() {
 /**
  * Provide key pair for token encryption and decryption.
  * If private key is not provided a key pair is generated
- * 
+ *
  * @returns {Object} - The generated JWKS key pair
  */
 async function getJWKSPair() {
   if (keyPair !== null) return keyPair;
 
-  if (config.jwks.private_key_path !== undefined ) {
+  if (config.jwks.private_key_path !== undefined) {
     keyPair = await loadKeysFromFiles();
   } else {
     keyPair = await generateKeyPair();
   }
-  
+
   return keyPair;
 }
 

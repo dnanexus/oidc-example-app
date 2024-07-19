@@ -1,4 +1,4 @@
-module.exports = function(error, req, res, next) {    
+module.exports = function (error, req, res, next) {
   console.dir({error}, {depth: null});
   res.status(500).json({
     error: {
