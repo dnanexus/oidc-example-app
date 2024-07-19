@@ -2,6 +2,11 @@ require('dotenv').config();
 
 const cfg = {
   port: process.env['APP_PORT'] ?? 3333,
+  session: {
+    cookie: {
+      secure: process.env['SESSION_COOKIE_SECURE'] ?? false,
+    },
+  },
   oidc: {
     oidc_provider_url: process.env['OIDC_PROVIDER_URL'] ?? 'http://localhost:3000',
     client_id: process.env['OIDC_CLIENT_ID'] ?? 'exampleAppClientId',

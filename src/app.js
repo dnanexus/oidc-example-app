@@ -8,13 +8,11 @@ const config = require('./config/config');
 const routes = require('./routes');
 const errorHandler = require('./errorHandler');
 
-const callbackProtocol = new URL(config.oidc.redirect_url).protocol;
-
 const app = express();
 
 app.use(session({
   secret: randomUUID(),
-  cookie: {maxAge: 60000, secure: callbackProtocol === 'https:'},
+  cookie: {maxAge: 60000, secure: config.session.cookie.secure},
   resave: false,
   saveUninitialized: true
 }));
