@@ -38,6 +38,15 @@ async function callback(req, res, next) {
       <legend>Decoded ID Token</legend>
       <pre>${decodedTokenPretty}</pre>
     </fieldset>
+    <br/>
+    <fieldset>
+      <legend>The user info</legend>
+      <ul>
+        ${tokenSet.scope.includes('user_id') ? `<li><strong>User ID:</strong> <pre>${decodedToken.user_id}</pre></li>` : ''}
+        ${tokenSet.scope.includes('name') ? `<li><strong>Full Name:</strong> <pre>${decodedToken.name}</pre></li>` : ''}
+        ${tokenSet.scope.includes('email') ? `<li><strong>Email:</strong> <pre>${decodedToken.email}</pre></li>` : ''}
+      </ul>
+    </fieldset>
   `);
   } catch (err) {
    next(err);
